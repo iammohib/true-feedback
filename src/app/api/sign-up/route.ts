@@ -1,12 +1,28 @@
 import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/user.model";
+import { signUpSchema } from "@/schemas/signUpSchema";
 import bcrypt from "bcryptjs";
+
+const SignUpSchema = signUpSchema;
 
 export async function POST(request: Request) {
   await dbConnect();
   try {
     const { username, email, password } = await request.json();
+
+    const result = SignUpSchema.safeParse({ username, email, password });
+    console.log(result);
+    if (!result.success) {
+      const signUpErrors = result.error.issues.map((e) => e.message) || [];
+      return Response.json(
+        {
+          success: false,
+          message: signUpErrors,
+        },
+        { status: 400 }
+      );
+    }
 
     const existingVerifiedUserByUsername = await UserModel.findOne({
       username,
