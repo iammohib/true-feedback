@@ -80,7 +80,6 @@ export default function SignUpForm() {
       setIsSubmitting(false);
       router.replace(`/verify/${username}`);
     } catch (error) {
-      toast("SingUp failed");
       console.error("SingUp failed:", error);
 
       const axiosError = error as AxiosError<ApiResponse>;
@@ -90,6 +89,7 @@ export default function SignUpForm() {
         axiosError.response?.data.message ||
         "There was a problem with your sign-up. Please try again.";
       console.log(errorMessage);
+      toast(errorMessage);
       setIsSubmitting(false);
       return;
     }
