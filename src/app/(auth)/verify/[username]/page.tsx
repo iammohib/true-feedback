@@ -41,7 +41,7 @@ export default function VerifyAccount() {
       }
 
       toast("Account verified successfully");
-      router.replace(`/api/sign-in`);
+      router.replace(`/sign-in`);
       return;
     } catch (error) {
       console.error("Account verification failed:", error);
